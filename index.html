@@ -1,1 +1,329 @@
 
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ОРЛЫ — OMNI UNION BETA</title>
+<style>
+:root {
+  --red: #b51f2b;
+  --dark: #090909;
+  --panel: #151515;
+  --text: #eee;
+  --muted: #999;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--dark);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+header {
+  text-align: center;
+  padding: 55px 20px 35px;
+  background: radial-gradient(circle, #421014, #090909 70%);
+  border-bottom: 1px solid #642027;
+}
+header h1 {
+  margin: 0;
+  color: #e13b48;
+  font-size: clamp(30px, 7vw, 54px);
+  letter-spacing: 5px;
+}
+header p { color: #bbb; letter-spacing: 3px; }
+.container { max-width: 850px; margin: auto; padding: 25px 18px; }
+.panel {
+  background: var(--panel);
+  border: 1px solid #382024;
+  border-radius: 12px;
+  padding: 22px;
+  margin: 20px 0;
+}
+h2 { color: #e13b48; }
+h3 { color: #ddd; }
+label { display: block; margin: 12px 0; }
+input[type="text"], textarea {
+  width: 100%;
+  padding: 13px;
+  color: white;
+  background: #090909;
+  border: 1px solid #533038;
+  border-radius: 7px;
+  font-size: 16px;
+}
+textarea { min-height: 90px; resize: vertical; }
+.question {
+  padding: 15px 0;
+  border-bottom: 1px solid #302326;
+}
+.question:last-child { border: 0; }
+button {
+  background: var(--red);
+  color: white;
+  border: 0;
+  padding: 13px 22px;
+  border-radius: 7px;
+  font-size: 15px;
+  cursor: pointer;
+  margin: 8px 5px 8px 0;
+}
+button:hover { background: #d32b39; }
+.secondary { background: #333; }
+.small { color: var(--muted); font-size: 13px; }
+#result { display: none; }
+footer {
+  text-align: center;
+  color: #777;
+  padding: 30px 15px;
+  border-top: 1px solid #292020;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>ОРЛЫ</h1>
+  <p>OMNI UNION BETA</p>
+  <div class="small">СИСТЕМА ВСТУПИТЕЛЬНОГО ТЕСТИРОВАНИЯ</div>
+</header>
+
+<main class="container">
+  <section class="panel">
+    <h2>Добро пожаловать</h2>
+    <p>
+      Перед вами вступительное тестирование организации ОРЛЫ.
+      Оно предназначено для оценки самостоятельности, ответственности,
+      командного мышления и способности кандидата принимать решения.
+    </p>
+    <p><b>Количество вопросов:</b> 25</p>
+    <p><b>Количество разделов:</b> 7</p>
+    <p><b>Максимальный результат:</b> 100 баллов</p>
+    <p class="small">
+      Внимательно прочитайте вопросы. Выбирайте ответы, которые
+      действительно отражают ваше поведение.
+    </p>
+  </section>
+
+  <form id="testForm">
+    <section class="panel">
+      <h2>Регистрация кандидата</h2>
+      <label>
+        Псевдоним кандидата
+        <input type="text" id="candidate" maxlength="40"
+          placeholder="Введите свой псевдоним" required>
+      </label>
+    </section>
+
+    <div id="questions"></div>
+
+    <section class="panel">
+      <h2>Заключительный вопрос</h2>
+      <p>Почему вы хотите стать частью ОРЛОВ?</p>
+      <textarea id="finalAnswer" maxlength="1000"
+        placeholder="Ваш ответ..."></textarea>
+      <button type="submit">Завершить тестирование</button>
+    </section>
+  </form>
+
+  <section class="panel" id="result">
+    <h2>Тестирование завершено</h2>
+    <p id="resultText"></p>
+    <p class="small">
+      Результат является предварительным. Окончательное решение
+      о классе кандидата принимает администрация.
+    </p>
+    <button onclick="window.print()">Распечатать результат</button>
+    <button class="secondary" onclick="location.reload()">Пройти заново</button>
+  </section>
+
+  <section class="panel">
+    <h2>Классификация</h2>
+    <p><b>A</b> — начальный уровень.</p>
+    <p><b>B</b> — базовый уровень.</p>
+    <p><b>C</b> — уверенный уровень.</p>
+    <p><b>D</b> — высокий уровень.</p>
+    <p><b>S</b> — особый статус, присваиваемый главой.</p>
+    <p class="small">
+      Класс определяется администрацией по совокупности критериев,
+      а не только по количеству набранных баллов.
+    </p>
+  </section>
+
+  <section class="panel">
+    <h2>Административная информация</h2>
+    <p>
+      Результаты в этой демонстрационной версии сохраняются только
+      в браузере текущего пользователя. Они не отправляются комиссии
+      автоматически.
+    </p>
+    <p class="small">
+      Не вводите реальные фамилии, адреса, номера телефонов
+      или другие личные данные.
+    </p>
+  </section>
+</main>
+
+<footer>
+  ОРЛЫ — OMNI UNION BETA<br>
+  <span class="small">Система внутреннего тестирования</span>
+</footer>
+
+<script>
+const sections = [
+  {
+    title: "I. Самостоятельность",
+    questions: [
+      "Ты получил сложную задачу, но никто не объяснил, как её выполнять. Твои действия?",
+      "Ты обнаружил ошибку в собственной работе. Что предпримешь?",
+      "Как ты поступишь, если не знаешь ответа на поставленный вопрос?",
+      "Что для тебя важнее: быстро закончить задачу или выполнить её качественно?"
+    ]
+  },
+  {
+    title: "II. Командная работа",
+    questions: [
+      "В команде возник конфликт. Как ты поступишь?",
+      "Один из участников не справляется со своей частью работы. Твои действия?",
+      "Что для тебя важнее всего в команде?",
+      "Как ты относишься к совместной ответственности за результат?"
+    ]
+  },
+  {
+    title: "III. Ответственность",
+    questions: [
+      "Ты пообещал выполнить задачу, но понимаешь, что не успеваешь. Что сделаешь?",
+      "Как ты реагируешь на собственные ошибки?",
+      "Можно ли перекладывать ответственность на другого участника?",
+      "Что означает для тебя быть ответственным человеком?"
+    ]
+  },
+  {
+    title: "IV. Критическое мышление",
+    questions: [
+      "Ты получил информацию, достоверность которой вызывает сомнения. Что предпримешь?",
+      "Большинство участников поддерживают решение, с которым ты не согласен. Твои действия?",
+      "Как ты отличаешь факт от личного мнения?",
+      "Готов ли ты пересмотреть свою позицию при появлении новых доказательств?"
+    ]
+  },
+  {
+    title: "V. Дисциплина",
+    questions: [
+      "Как ты организуешь выполнение нескольких задач одновременно?",
+      "Что будешь делать, если не согласен с установленными правилами?",
+      "Как ты относишься к срокам выполнения заданий?"
+    ]
+  },
+  {
+    title: "VI. Инициатива",
+    questions: [
+      "Ты заметил возможность улучшить работу команды. Твои действия?",
+      "Готов ли ты предложить собственную идею, даже если она отличается от остальных?",
+      "Что ты сделаешь, если команда столкнулась с неожиданной проблемой?"
+    ]
+  },
+  {
+    title: "VII. Личное понимание",
+    questions: [
+      "Каким ты видишь хорошего участника организации?",
+      "Что, по твоему мнению, помогает организации развиваться?",
+      "Какой вклад ты хотел бы внести в ОРЛЫ?"
+    ]
+  }
+];
+
+const root = document.getElementById("questions");
+let number = 0;
+
+sections.forEach((section, sectionIndex) => {
+  const panel = document.createElement("section");
+  panel.className = "panel";
+
+  const heading = document.createElement("h2");
+  heading.textContent = section.title;
+  panel.appendChild(heading);
+
+  section.questions.forEach(question => {
+    number++;
+    const block = document.createElement("div");
+    block.className = "question";
+
+    const title = document.createElement("h3");
+    title.textContent = number + ". " + question;
+    block.appendChild(title);
+
+    const options = [
+      "Самостоятельно разберусь в ситуации.",
+      "Обращусь за советом и уточнением.",
+      "Сначала оценю обстоятельства, затем приму решение.",
+      "Предпочту дождаться указаний."
+    ];
+
+    options.forEach((option, index) => {
+      const label = document.createElement("label");
+      const radio = document.createElement("input");
+      radio.type = "radio";
+      radio.name = "q" + number;
+      radio.value = index + 1;
+      radio.required = true;
+      label.appendChild(radio);
+      label.append(" " + option);
+      block.appendChild(label);
+    });
+
+    panel.appendChild(block);
+  });
+
+  root.appendChild(panel);
+});
+
+document.getElementById("testForm").addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  const answers = [];
+  let score = 0;
+
+  for (let i = 1; i <= number; i++) {
+    const selected = document.querySelector('input[name="q' + i + '"]:checked');
+    if (!selected) {
+      alert("Пожалуйста, ответьте на все вопросы.");
+      return;
+    }
+    answers.push({
+      question: i,
+      answer: Number(selected.value)
+    });
+    score += Number(selected.value);
+  }
+
+  const candidate = document.getElementById("candidate").value.trim();
+  const finalAnswer = document.getElementById("finalAnswer").value.trim();
+
+  const report = {
+    candidate: candidate,
+    date: new Date().toLocaleString("ru-RU"),
+    score: score,
+    maximum: number * 4,
+    answers: answers,
+    finalAnswer: finalAnswer
+  };
+
+  localStorage.setItem("orly_test_" + Date.now(), JSON.stringify(report));
+
+  document.getElementById("resultText").textContent =
+    "Кандидат: " + candidate +
+    ". Предварительный результат: " + score +
+    " из " + (number * 4) + " баллов.";
+
+  document.getElementById("testForm").style.display = "none";
+  document.getElementById("result").style.display = "block";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+</script>
+
+</body>
+</html>
+
